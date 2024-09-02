@@ -22,7 +22,7 @@ const Inicio = () => {
 console.log(reportes)
 
 const handleDeleteReporte = (_id) => {
-  fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`, {
+  fetch(`${LOCAL_BASE_BACKEND_URL}/reportes/${_id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
