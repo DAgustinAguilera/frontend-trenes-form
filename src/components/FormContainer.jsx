@@ -71,7 +71,7 @@ export const FormContainer = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:4000/reporte', {
+    fetch(`${LOCAL_BASE_BACKEND_URL}/reporte`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
