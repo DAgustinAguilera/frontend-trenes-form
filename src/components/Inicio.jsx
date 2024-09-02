@@ -10,7 +10,7 @@ const Inicio = () => {
   const [reportes, setReportes] = useState([]);
 
   useEffect(() => {
-    fetch(`${BLOCAL_BASE_BACKEND_URL}/reportes`)
+    fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`)
     .then(async (response) => {
       const resJSON = await response.json();
       setReportes(resJSON["data"]);
