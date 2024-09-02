@@ -4,7 +4,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Swal from 'sweetalert2'
 
-const LOCAL_BASE_BACKEND_URL = import.meta.env.BASE_BACKEND_URL || "http://localhost:4000";
+const BASE_BACKEND_URL = import.meta.env.BASE_BACKEND_URL || "http://localhost:4000";
 console.log(BASE_BACKEND_URL, import.meta.env.VITE_VERCEL_ENV)
 const Inicio = () => {
   const [reportes, setReportes] = useState([]);
@@ -80,7 +80,7 @@ return (
             <Row>
               <Col>
                 <p>De {reporte.siendo}: {reporte.nombre}</p>
-                <p>Con: {reporte.junto}</p>
+                <p>Con: {reporte.guarda}</p>
                 <p>Guarda: {reporte.con}</p>
                 <p>Locomotora: {reporte.locomotora}</p>
                 <p>N° ART: {reporte.art}</p>
