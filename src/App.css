@@ -1,6 +1,9 @@
 .cards{
   scale: 0.9;
-}
+};
 .cblack{
   color: black;
+};
+.w2{
+  width: 4rem;
 }
