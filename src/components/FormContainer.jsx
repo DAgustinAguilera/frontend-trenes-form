@@ -12,7 +12,8 @@ export const FormContainer = () => {
     con: '',
     art: '',
     dia: '',
-    observaciones: ''
+    observaciones: '',
+    estado: true
   });
 
   const [data, setData] = useState({
@@ -21,6 +22,7 @@ export const FormContainer = () => {
     guardas: [],
     conductores: [],
     pres: [],
+    estado: true
   });
 
   const [nombreOptions, setNombreOptions] = useState([]); // Definir nombreOptions
@@ -88,6 +90,7 @@ export const FormContainer = () => {
           art: '',
           dia: '',
           observaciones: '',
+          estado: true
         });
 
         Swal.fire({
