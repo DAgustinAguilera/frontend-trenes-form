@@ -5,7 +5,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Swal from 'sweetalert2'
 
 const BASE_BACKEND_URL = !!import.meta.env.VITE_VERCEL_ENV ? import.meta.env.VITE_PUBLIC_BASE_BACKEND_URL : "http://localhost:4000"
-
+console.log(BASE_BACKEND_URL, meta.env.VITE_VERCEL_ENV)
 const Inicio = () => {
   const [reportes, setReportes] = useState([]);
 
