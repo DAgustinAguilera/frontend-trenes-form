@@ -42,10 +42,10 @@ export const FormContainer = () => {
     if (formData.siendo === 'Conductor') {
       console.log('Setting options for conductor');
       setNombreOptions(data.conductores);
-      setJuntoOptions(data.guardas);
+      setJuntoOptions(data.pres);
     } else if (formData.siendo === 'Pre') {
       console.log('Setting options for pre');
-      setNombreOptions(data.guardas);
+      setNombreOptions(data.pres);
       setJuntoOptions(data.conductores);
     } else {
       setNombreOptions([]);
@@ -165,7 +165,7 @@ export const FormContainer = () => {
                   <Form.Label htmlFor="con">Con el guarda:</Form.Label>
                   <Form.Control as="select" id="con" value={formData.con} onChange={handleChange}>
                     <option value="">Seleccione...</option>
-                    {data.pres.map((g, index) => (
+                    {data.guardas.map((g, index) => (
                       <option key={index} value={g}>{g}</option>
                     ))}
                   </Form.Control>

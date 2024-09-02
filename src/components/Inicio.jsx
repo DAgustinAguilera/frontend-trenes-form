@@ -46,7 +46,7 @@ return (
             <Row>
               <Col>
                 <p>De {reporte.siendo}: {reporte.nombre}</p>
-                <p>Con: {reporte.junto}</p>
+                <p>Con: {reporte.guarda}</p>
                 <p>Guarda: {reporte.con}</p>
                 <p>Locomotora: {reporte.locomotora}</p>
                 <p>N° ART: {reporte.art}</p>
