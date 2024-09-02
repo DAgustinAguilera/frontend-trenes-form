@@ -28,8 +28,11 @@ export const FormContainer = () => {
   const [nombreOptions, setNombreOptions] = useState([]); // Definir nombreOptions
   const [juntoOptions, setJuntoOptions] = useState([]);   // Definir juntoOptions
 
+  const LOCAL_BASE_BACKEND_URL = import.meta.env.VITE_PUBLIC_BASE_BACKEND_URL || "http://localhost:4000";
+
+
   useEffect(() => {
-    fetch('http://localhost:4000/db')
+    fetch(`${LOCAL_BASE_BACKEND_URL}/db`)
       .then(async (response) => {
         const resJSON = await response.json();
         setData(resJSON["data"][0]);

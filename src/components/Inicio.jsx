@@ -5,7 +5,6 @@ import Tabs from 'react-bootstrap/Tabs';
 import Swal from 'sweetalert2'
 
 const LOCAL_BASE_BACKEND_URL = import.meta.env.VITE_PUBLIC_BASE_BACKEND_URL || "http://localhost:4000";
-console.log(LOCAL_BASE_BACKEND_URL, import.meta.env.VITE_VERCEL_ENV)
 const Inicio = () => {
   const [reportes, setReportes] = useState([]);
 
@@ -23,13 +22,13 @@ const Inicio = () => {
 console.log(reportes)
 
 const handleDeleteReporte = (_id) => {
-  fetch(`${process.env.VITE_PUBLIC_BASE_BACKEND_URL}/reportes/${_id}`, {
+  fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`, {
     method: "DELETE",
   })
     .then((response) => response.json())
     .then((data) => {
       // Actualizar la lista de reportes después de eliminar uno
-      return fetch("http://localhost:4000/reportes")
+      return fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`)
     })
     .then(async (response) => {
       const resJSON = await response.json();
