@@ -3,8 +3,15 @@ import { Container, Card, Row, Col, Form, Button } from "react-bootstrap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { Google } from 'react-bootstrap-icons';
+import Dom from "react-dom"
 
 function Login() {
+
+  const handleLogin = () =>{
+    window.location.href = `http://localhost:4000/auth/google/callback`
+  }
+
+
   return (
     <Container className="mt-5">
       <Card className="w-25 position-absolute top-50 start-50 translate-middle">
@@ -25,7 +32,7 @@ function Login() {
               <Button  variant="success" className="m-1 w-50 ">Iniciar sesion</Button>
               <div className="bg-body-secondary d-flex flex-column align-items-center justify-content-center border border-dark-subtle p-4 m-2 rounded">
                 <Button className="w-100">Registrarse</Button>
-                <Button variant="light" className="mt-4 border border-dark-subtle"><Google className=""/> Registrarse con Google</Button>
+                <Button onClick={handleLogin} variant="light" className="mt-4 border border-dark-subtle"><Google className=""/> Registrarse con Google</Button>
               </div>
             </div>
           </Form>
