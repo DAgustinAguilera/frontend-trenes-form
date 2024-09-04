@@ -2,10 +2,37 @@ import React, { useState, useEffect } from "react";
 import { Container, Card, Row, Col, Form, Button } from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const LOCAL_BASE_BACKEND_URL = import.meta.env.VITE_PUBLIC_BASE_BACKEND_URL || "http://localhost:4000";
+
 const Inicio = () => {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const unparseInfo = query.get('login_info');
+    
+    if (unparseInfo) {
+      try {
+        const loginInfo = JSON.parse(unparseInfo);
+        const jwt = loginInfo.jwt;
+        const user = JSON.stringify(loginInfo.user);
+
+        if (jwt && user) {
+          localStorage.setItem('jwt', jwt);
+          localStorage.setItem('user', user); // Cambié la clave de 'jwt' a 'user' para evitar sobrescribir
+          navigate('/', { replace: true });
+        }
+      } catch (error) {
+        console.error('Error parsing login_info:', error);
+      }
+    }
+  }, [location, navigate]);
+
   const [reportes, setReportes] = useState([]);
 
   useEffect(() => {
