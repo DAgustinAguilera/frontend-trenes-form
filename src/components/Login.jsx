@@ -8,8 +8,8 @@ import Dom from "react-dom"
 function Login() {
 
   const handleLogin = () =>{
-    window.location.href = `http://localhost:4000/auth/google/callback`
-  }
+    window.location.href   = `http://localhost:4000/auth/google/callback`
+  } 
 
 
   return (

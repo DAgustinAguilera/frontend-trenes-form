@@ -22,9 +22,12 @@ const Inicio = () => {
     if (unparseInfo) {
       try {
         const loginInfo = JSON.parse(unparseInfo);
+        const jwt = loginInfo.jwt;
+        const user = loginInfo.user;
+
         if (jwt && user) {
           dispatch({type: "LOGIN", payload:loginInfo})
-          navigate('/', { replace: true });
+          navigate('/reportes');
         }
       } catch (error) {
         console.error('Error parsing login_info:', error);
@@ -33,26 +36,40 @@ const Inicio = () => {
   }, [location, navigate]);
 
   const [reportes, setReportes] = useState([]);
+  const {state: {jwt}} = useContext(AuthContext)
 
   useEffect(() => {
-    fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`)
-    .then(async (response) => {
-      const resJSON = await response.json();
-      setReportes(resJSON["data"]);
+    if(!!jwt){
+      fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`, {method: "GET", headers: {
+        authorization: `Bearer ${jwt}`
+      },
     })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Error en la autenticación");
+        }
+        const resJSON = await response.json();
+        setReportes(resJSON["data"]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }    
 }, []);
 
 const handleDeleteReporte = (_id) => {
-  fetch(`${LOCAL_BASE_BACKEND_URL}/reportes/${_id}`, {
-    method: "DELETE",
+  fetch(`${LOCAL_BASE_BACKEND_URL}/reporte/${_id}`,{
+    method: "DELETE",headers: {
+      authorization: `Bearer ${jwt}`
+    },
   })
     .then((response) => response.json())
     .then((data) => {
       // Actualizar la lista de reportes después de eliminar uno
-      return fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`)
+      return fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`, {method: "GET", headers: {
+        authorization: `Bearer ${jwt}`
+      },
+    })
     })
     .then(async (response) => {
       const resJSON = await response.json();
@@ -87,7 +104,7 @@ return (
             <Button
               className="ms-4"
               variant="danger"
-              onClick={() => handleDeleteReporte(reporte._id)}
+              onClick={(e) => {e.stopPropagation(); handleDeleteReporte(reporte._id)}}
             >
               Borrar
             </Button>

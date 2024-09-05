@@ -7,23 +7,20 @@ import Inicio from "./components/Inicio";
 import Login from "./components/Login";
 import Informes from "./components/Informes";
 import "./App.css";
+import { useEffect } from "react";
 
 export const AuthContext = React.createContext();
 
-const checkUserLS = (valor) => {
-  return typeof localStorage !== "undefined" ? JSON.parse(localStorage.getItem(valor)) : null
-}
-
 const initialState = {
-  isAuthenticated: !!checkUserLS("jwt"),
-  jwt: checkUserLS("jwt"),
-  user: checkUserLS("user")
+  isAuthenticated: false, 
+  jwt: null, 
+  user: null
 }
 const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
       localStorage.setItem("user", JSON.stringify(action.payload.user));
-      localStorage.setItem("jwt", JSON.stringify(action.payload.jwt));
+      localStorage.setItem("jwt", action.payload.jwt);
       return {
         ...state,
         isAuthenticated: true,
@@ -37,12 +34,29 @@ const reducer = (state, action) => {
         isAuthenticated: false,
         user: null
       };
+    case "SET_USER":
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.payload.user,
+        jwt: action.payload.jwt
+      }
     default:
       return state;
   }
 };
 function App() {
   const [state, dispatch] = React.useReducer(reducer, initialState)
+
+  useEffect( () => {
+    const user = localStorage.getItem("user")
+    const jwt = localStorage.getItem("jwt")
+
+
+    if(!!jwt || !!user){
+      dispatch({type:"SET_USER", payload: { user, jwt }})
+    }
+  }, [])
   return (
     <AuthContext.Provider value={{state, dispatch}}>
       <Router>
