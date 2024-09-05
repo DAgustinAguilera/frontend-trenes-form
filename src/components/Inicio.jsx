@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container, Card, Row, Col, Form, Button } from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Swal from 'sweetalert2';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from "../App";
 
 const LOCAL_BASE_BACKEND_URL = import.meta.env.VITE_PUBLIC_BASE_BACKEND_URL || "http://localhost:4000";
 
 const Inicio = () => {
+
+  const {state, dispatch} = useContext(AuthContext)
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,12 +22,8 @@ const Inicio = () => {
     if (unparseInfo) {
       try {
         const loginInfo = JSON.parse(unparseInfo);
-        const jwt = loginInfo.jwt;
-        const user = JSON.stringify(loginInfo.user);
-
         if (jwt && user) {
-          localStorage.setItem('jwt', jwt);
-          localStorage.setItem('user', user); // Cambié la clave de 'jwt' a 'user' para evitar sobrescribir
+          dispatch({type: "LOGIN", payload:loginInfo})
           navigate('/', { replace: true });
         }
       } catch (error) {
@@ -45,8 +44,6 @@ const Inicio = () => {
       console.log(err);
     });
 }, []);
-
-console.log(reportes)
 
 const handleDeleteReporte = (_id) => {
   fetch(`${LOCAL_BASE_BACKEND_URL}/reportes/${_id}`, {
