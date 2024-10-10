@@ -1,34 +1,75 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container, Card, Row, Col, Form, Button } from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from "../App";
 
 const LOCAL_BASE_BACKEND_URL = import.meta.env.VITE_PUBLIC_BASE_BACKEND_URL || "http://localhost:4000";
+
 const Inicio = () => {
-  const [reportes, setReportes] = useState([]);
+
+  const {state, dispatch} = useContext(AuthContext)
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`)
-    .then(async (response) => {
-      const resJSON = await response.json();
-      setReportes(resJSON["data"]);
+    const query = new URLSearchParams(location.search);
+    const unparseInfo = query.get('login_info');
+    
+    if (unparseInfo) {
+      try {
+        const loginInfo = JSON.parse(unparseInfo);
+        const jwt = loginInfo.jwt;
+        const user = loginInfo.user;
+
+        if (jwt && user) {
+          dispatch({type: "LOGIN", payload:loginInfo})
+          navigate('/reportes');
+        }
+      } catch (error) {
+        console.error('Error parsing login_info:', error);
+      }
+    }
+  }, [location, navigate]);
+
+  const [reportes, setReportes] = useState([]);
+  const {state: {jwt}} = useContext(AuthContext)
+
+  useEffect(() => {
+    if(!!jwt){
+      fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`, {method: "GET", headers: {
+        authorization: `Bearer ${jwt}`
+      },
     })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Error en la autenticación");
+        }
+        const resJSON = await response.json();
+        setReportes(resJSON["data"]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }    
 }, []);
 
-console.log(reportes)
-
 const handleDeleteReporte = (_id) => {
-  fetch(`${LOCAL_BASE_BACKEND_URL}/reportes/${_id}`, {
-    method: "DELETE",
+  fetch(`${LOCAL_BASE_BACKEND_URL}/reporte/${_id}`,{
+    method: "DELETE",headers: {
+      authorization: `Bearer ${jwt}`
+    },
   })
     .then((response) => response.json())
     .then((data) => {
       // Actualizar la lista de reportes después de eliminar uno
-      return fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`)
+      return fetch(`${LOCAL_BASE_BACKEND_URL}/reportes`, {method: "GET", headers: {
+        authorization: `Bearer ${jwt}`
+      },
+    })
     })
     .then(async (response) => {
       const resJSON = await response.json();
@@ -63,7 +104,7 @@ return (
             <Button
               className="ms-4"
               variant="danger"
-              onClick={() => handleDeleteReporte(reporte._id)}
+              onClick={(e) => {e.stopPropagation(); handleDeleteReporte(reporte._id)}}
             >
               Borrar
             </Button>
